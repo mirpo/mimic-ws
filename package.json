@@ -1,6 +1,6 @@
 {
   "name": "mimic-ws",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mimic-ws is drop-in replacement for ws, power by uWebSocket.js",
   "repository": {
     "type": "git",
