@@ -1,0 +1,4 @@
+node_modules/**
+stress-test/**
+coverage/**
+jest.config.js
