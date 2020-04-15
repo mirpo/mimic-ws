@@ -2,20 +2,18 @@ name: Run eslint and tests
 
 on:
   push:
-    branches:
-      - master
-    push:
-      tags:
-      - v*
+    tags:
+      - '*'
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node-version: [10.x]
+        os: [macos-latest, ubuntu-latest]
+        node-version: [10.x, 12.x, 13.x]
 
     steps:
       - uses: actions/checkout@v1
@@ -31,12 +29,22 @@ jobs:
         run: npm run eslint
 
       - name: test
-        run: |
-          npm run test
+        run: npm run test
 
-      - name: publish
-        run: |
+  publish-npm:
+    name: publish to npm
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+          registry-url: https://registry.npmjs.org/
+
+      - run: |
+          npm ci
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-
