@@ -1,6 +1,6 @@
 # mimic-ws
 
-[![Build Status][ci-image]][ci-url] [![Coverage Status][coveralls-image]][coveralls-url]
+[![Npm version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
 Mimic-ws is drop-in replacement for [ws](https://github.com/websockets/ws), powered by [uWebSockets.js](https://github.com/uNetworking/uWebSockets.js)
 
@@ -213,8 +213,11 @@ We're using the GitHub releases for changelog entries.
 #### License
 [MIT](LICENSE)
 
-[ci-image]: https://github.com/mirpo/mimic-ws/workflows/Tests/badge.svg
-[ci-url]: https://github.com/mirpo/mimic-ws/actions?workflow=Tests
+[npm-image]: https://img.shields.io/npm/v/mimic-ws.svg?logo=npm
+[npm-url]: https://www.npmjs.com/package/mimic-ws
+
+[ci-image]: https://github.com/mirpo/mimic-ws/workflows/Build/badge.svg
+[ci-url]: https://github.com/mirpo/mimic-ws/actions?workflow=Build
 
 [coveralls-image]: https://coveralls.io/repos/github/mirpo/mimic-ws/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/repos/github/mirpo/mimic-ws/?branch=master
