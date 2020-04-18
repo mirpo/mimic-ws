@@ -8,14 +8,13 @@ Mimic-ws is drop-in replacement for [ws](https://github.com/websockets/ws), powe
 `npm install mimic-ws`
 
 #### Been a drop-in replacement, `mimic-ws` has some limits and difference from all used libraries:
-- for SSL initialization you don't need separate HTTP server, just just define parameters, check [examples](#usage-examples)
-- `uWebSockets.js` doesn't have `verifyClient` handler, so we run `verifyClient` when open websocket and close if it's needed.
-    - `verifyClient` parameters are bit different.
-- `clientTracking` is always true, and `wss.clients` is a `Map`, key is unique id, each `ws` has the same unique attribute `id`
+- for SSL initialization you don't need separate HTTP server, just just define parameters, check [examples](#usage-examples).
+- `verifyClient` parameters are bit different.
+- `clientTracking` is always true, and `wss.clients` is a `Map`, key is unique id, each `ws` has the same unique attribute `id`.
 - added `backpressure` event, so you can check that websocket is slow.
 - added `drain` event, so you can check that websocket buffer is free.
 - `publish`/`subscribe` functions with MQTT topics support, check [examples](#usage-examples)
-- `WebSocket` handlers like `onclose`/`onerror`/` are removed. Use events.
+- `WebSocket` handlers like `onclose`/`onerror` are removed. Use events.
 - use `idleTimeout` for dropping connections.
 - use `maxBackpressure` for dropping slow consumers.
 

@@ -29,7 +29,9 @@
     "realtime",
     "nodejs",
     "websocket-client",
-    "websocket-server"
+    "websocket-server",
+    "uWebSockets.js",
+    "uws"
   ],
   "author": "mirpo <7105861+mirpo@users.noreply.github.com>",
   "license": "MIT",
