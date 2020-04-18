@@ -1,5 +1,7 @@
 # mimic-ws
 
+[![Npm version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coveralls-image]][coveralls-url]
+
 Mimic-ws is drop-in replacement for [ws](https://github.com/websockets/ws), powered by [uWebSockets.js](https://github.com/uNetworking/uWebSockets.js)
 
 **Note**: This module does not work in the browser. 
@@ -8,14 +10,13 @@ Mimic-ws is drop-in replacement for [ws](https://github.com/websockets/ws), powe
 `npm install mimic-ws`
 
 #### Been a drop-in replacement, `mimic-ws` has some limits and difference from all used libraries:
-- for SSL initialization you don't need separate HTTP server, just just define parameters, check [examples](#usage-examples)
-- `uWebSockets.js` doesn't have `verifyClient` handler, so we run `verifyClient` when open websocket and close if it's needed.
-    - `verifyClient` parameters are bit different.
-- `clientTracking` is always true, and `wss.clients` is a `Map`, key is unique id, each `ws` has the same unique attribute `id`
+- for SSL initialization you don't need separate HTTP server, just just define parameters, check [examples](#usage-examples).
+- `verifyClient` parameters are bit different.
+- `clientTracking` is always true, and `wss.clients` is a `Map`, key is unique id, each `ws` has the same unique attribute `id`.
 - added `backpressure` event, so you can check that websocket is slow.
 - added `drain` event, so you can check that websocket buffer is free.
 - `publish`/`subscribe` functions with MQTT topics support, check [examples](#usage-examples)
-- `WebSocket` handlers like `onclose`/`onerror`/` are removed. Use events.
+- `WebSocket` handlers like `onclose`/`onerror` are removed. Use events.
 - use `idleTimeout` for dropping connections.
 - use `maxBackpressure` for dropping slow consumers.
 
@@ -211,3 +212,12 @@ We're using the GitHub releases for changelog entries.
 
 #### License
 [MIT](LICENSE)
+
+[npm-image]: https://img.shields.io/npm/v/mimic-ws.svg?logo=npm
+[npm-url]: https://www.npmjs.com/package/mimic-ws
+
+[ci-image]: https://github.com/mirpo/mimic-ws/workflows/Build/badge.svg
+[ci-url]: https://github.com/mirpo/mimic-ws/actions?workflow=Build
+
+[coveralls-image]: https://coveralls.io/repos/github/mirpo/mimic-ws/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/repos/github/mirpo/mimic-ws/?branch=master

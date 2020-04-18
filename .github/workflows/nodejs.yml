@@ -1,4 +1,4 @@
-name: Run eslint and tests
+name: Build
 
 on:
   schedule:
@@ -33,8 +33,12 @@ jobs:
       - name: eslint
         run: npm run eslint
 
-      - name: test
+      - name: test and coverage
         run: |
           export DEBUG=mimic-ws*
           npm run test
 
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

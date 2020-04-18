@@ -13,8 +13,9 @@
   "main": "index.js",
   "scripts": {
     "coverage": "jest --coverage --runInBand",
-    "test": "jest --runInBand",
-    "eslint": "eslint ."
+    "test": "jest --runInBand --coverage",
+    "eslint": "eslint .",
+    "coveralls": "jest --coverage --runInBand && coveralls < coverage/lcov.info"
   },
   "engines": {
     "node": "12.14.0",
@@ -29,7 +30,9 @@
     "realtime",
     "nodejs",
     "websocket-client",
-    "websocket-server"
+    "websocket-server",
+    "uWebSockets.js",
+    "uws"
   ],
   "author": "mirpo <7105861+mirpo@users.noreply.github.com>",
   "license": "MIT",
