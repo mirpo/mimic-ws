@@ -221,7 +221,7 @@ describe('test WebSocket.Server', () => {
         const wss = new WebSocket.Server(
             {
                 verifyClient: () => false,
-                port,
+                port
             },
             () => {
                 const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
