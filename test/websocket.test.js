@@ -83,7 +83,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
                 expect(info.headers.pam).toEqual('bam')
                 expect(info.headers.host).toEqual(`localhost:${port}`)
                 expect(info.query).toEqual('token=qwerty')
-                expect(info.url).toEqual('/foobar/',)
+                expect(info.url).toEqual('/foobar/')
                 wss.close(done)
             }
         }, () => {

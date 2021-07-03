@@ -29,7 +29,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 13.x] # 14.x not supported by uWebSockets.js
+        node-version: [12.x]
 
     steps:
       - uses: actions/checkout@v1
