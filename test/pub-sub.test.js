@@ -3,7 +3,7 @@ const WebSocket = require('../index')
 const port = 1337
 
 describe('test pub-sub functions', () => {
-    it('pub-sub', async (done) => {
+    it('pub-sub', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -39,7 +39,7 @@ describe('test pub-sub functions', () => {
         })
     })
 
-    it('pub-sub mqtt topic', async (done) => {
+    it('pub-sub mqtt topic', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -73,7 +73,7 @@ describe('test pub-sub functions', () => {
         })
     })
 
-    it('pub-sub mqtt topic', async (done) => {
+    it('pub-sub mqtt topic', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -107,7 +107,7 @@ describe('test pub-sub functions', () => {
         })
     })
 
-    it('pub-sub unsubscribe from topic and unsubscribeAll topics', async (done) => {
+    it('pub-sub unsubscribe from topic and unsubscribeAll topics', (done) => {
         let serverSocket
 
         const wss = new WebSocket.Server({
