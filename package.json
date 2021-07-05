@@ -18,8 +18,8 @@
     "coveralls": "jest --coverage --runInBand && coveralls < coverage/lcov.info"
   },
   "engines": {
-    "node": "12.14.0",
-    "npm": "6.13.4"
+    "node": ">=14",
+    "npm": ">=6"
   },
   "keywords": [
     "webscoket",
