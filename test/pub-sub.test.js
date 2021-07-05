@@ -3,13 +3,42 @@ const WebSocket = require('../index')
 const port = 1337
 
 describe('test pub-sub functions', () => {
-    it('pub-sub', (done) => {
+    test('pub-sub publish to all subscribers (excluding publisher)', (done) => {
+        const wss = new WebSocket.Server({
+            port
+        }, () => {
+            const ws = new WebSocket(`ws://127.0.0.1:${wss.address().port}`)
+            ws.on('message', (message) => {
+                expect(message).toEqual('test-message')
+                wss.close(done)
+            })
+
+            const ws2 = new WebSocket(`ws://127.0.0.1:${wss.address().port}`)
+            ws2.on('message', (message) => {
+                done(new Error('Publisher should not receive'))
+            })
+        })
+
+        const topic = '/topic/test'
+
+        wss.on('connection', (ws) => {
+            // both subscribe
+            ws.subscribe(topic)
+
+            if (wss.clients.size === 2) {
+                // second websocket going to be publisher
+                ws.publish(topic, 'test-message')
+            }
+        })
+    })
+
+    test('pub-sub broadcast to all subscribers', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
             let gotMsg = 0
 
-            const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
+            const ws = new WebSocket(`ws://127.0.0.1:${wss.address().port}`)
             ws.on('message', (message) => {
                 gotMsg += 1
                 expect(message).toEqual('test-message')
@@ -18,7 +47,7 @@ describe('test pub-sub functions', () => {
                 }
             })
 
-            const ws2 = new WebSocket(`ws://localhost:${wss.address().port}`)
+            const ws2 = new WebSocket(`ws://127.0.0.1:${wss.address().port}`)
             ws2.on('message', (message) => {
                 gotMsg += 1
                 expect(message).toEqual('test-message')
@@ -34,12 +63,12 @@ describe('test pub-sub functions', () => {
             ws.subscribe(topic)
 
             if (wss.clients.size === 2) {
-                ws.publish(topic, 'test-message')
+                wss.publish(topic, 'test-message')
             }
         })
     })
 
-    it('pub-sub mqtt topic', (done) => {
+    test('pub-sub mqtt topic', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -68,18 +97,18 @@ describe('test pub-sub functions', () => {
         wss.on('connection', (ws) => {
             ws.subscribe(topic)
 
-            ws.publish('/topic/room1', 'room1-temperature')
-            ws.publish('/topic/room2', 'room2-temperature')
+            wss.publish('/topic/room1', 'room1-temperature')
+            wss.publish('/topic/room2', 'room2-temperature')
         })
     })
 
-    it('pub-sub mqtt topic', (done) => {
+    test('pub-sub mqtt topic', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
             let gotMsg = 0
 
-            const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
+            const ws = new WebSocket(`ws://127.0.0.1:${wss.address().port}`)
             ws.on('message', (message) => {
                 if (gotMsg === 0) {
                     expect(message).toEqual('room1-temperature')
@@ -102,12 +131,12 @@ describe('test pub-sub functions', () => {
         wss.on('connection', (ws) => {
             ws.subscribe(topic)
 
-            ws.publish('/topic/room1', 'room1-temperature')
-            ws.publish('/topic/room2', 'room2-temperature')
+            wss.publish('/topic/room1', 'room1-temperature')
+            wss.publish('/topic/room2', 'room2-temperature')
         })
     })
 
-    it('pub-sub unsubscribe from topic and unsubscribeAll topics', (done) => {
+    test('pub-sub unsubscribe from topic and unsubscribeAll topics', (done) => {
         let serverSocket
 
         const wss = new WebSocket.Server({
@@ -115,7 +144,7 @@ describe('test pub-sub functions', () => {
         }, () => {
             let gotMsg = 0
 
-            const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
+            const ws = new WebSocket(`ws://127.0.0.1:${wss.address().port}`)
             ws.on('message', (message) => {
                 if (gotMsg === 0) {
                     expect(message).toEqual('room1-temperature')
@@ -125,16 +154,16 @@ describe('test pub-sub functions', () => {
                     expect(message).toEqual('room2-temperature')
                     serverSocket.unsubscribe('/topic/room1')
 
-                    serverSocket.publish('/topic/room1', 'dont-get-room1')
-                    serverSocket.publish('/topic/room2', 'get-room2')
+                    wss.publish('/topic/room1', 'dont-get-room1')
+                    wss.publish('/topic/room2', 'get-room2')
                 }
 
                 if (gotMsg === 2) {
                     expect(message).toEqual('get-room2')
                     serverSocket.unsubscribeAll()
 
-                    serverSocket.publish('/topic/room1', 'dont-dont-room1')
-                    serverSocket.publish('/topic/room2', 'dont-dont-room2')
+                    wss.publish('/topic/room1', 'dont-dont-room1')
+                    wss.publish('/topic/room2', 'dont-dont-room2')
 
                     setTimeout(() => wss.close(done), 2000)
                 }
@@ -153,8 +182,8 @@ describe('test pub-sub functions', () => {
             ws.subscribe('/topic/room1')
             ws.subscribe('/topic/room2')
 
-            ws.publish('/topic/room1', 'room1-temperature')
-            ws.publish('/topic/room2', 'room2-temperature')
+            wss.publish('/topic/room1', 'room1-temperature')
+            wss.publish('/topic/room2', 'room2-temperature')
         })
     })
 })

@@ -5,7 +5,7 @@ const WebSocket = require('../index')
 const port = 1337
 
 describe('test WebSocket opened in WebSocket.Server', () => {
-    it('takes into account the data in the socket queue', (done) => {
+    test('takes into account the data in the socket queue', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -26,7 +26,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it("emits an 'upgrade' event", (done) => {
+    test("emits an 'upgrade' event", (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -39,7 +39,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it("emits a 'ping' event", (done) => {
+    test("emits a 'ping' event", (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -58,7 +58,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it("emits a 'pong' event", (done) => {
+    test("emits a 'pong' event", (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -73,7 +73,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('connects when pathname is not null', (done) => {
+    test('connects when pathname is not null', (done) => {
         const wss = new WebSocket.Server({
             port,
             path: '/foobar',
@@ -81,26 +81,30 @@ describe('test WebSocket opened in WebSocket.Server', () => {
                 expect(info).toHaveProperty('headers')
                 expect(info.headers.foo).toEqual('bar')
                 expect(info.headers.pam).toEqual('bam')
-                expect(info.headers.host).toEqual(`localhost:${port}`)
+                expect(info.headers.host).toEqual(`127.0.0.1:${port}`)
                 expect(info.query).toEqual('token=qwerty')
-                expect(info.url).toEqual('/foobar/')
-                wss.close(done)
+                expect(info.url).toEqual('/foobar')
+                return true
             }
         }, () => {
-            const ws = new WebSocket(`ws://localhost:${wss.address().port}/foobar/?token=qwerty`, {
+            const ws = new WebSocket('ws://127.0.0.1:1337/foobar?token=qwerty', {
                 headers: {
                     foo: 'bar',
                     pam: 'bam'
                 }
             })
+            ws.on('open', () => {
+                ws.close()
+                wss.close(done)
+            })
         })
     })
 
-    it('emit backpressure and drain events', (done) => {
+    test('emit backpressure and drain events', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
-            const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
+            const ws = new WebSocket(`ws://127.0.0.1:${wss.address().port}`)
         })
 
         wss.on('connection', (ws) => {
@@ -125,12 +129,12 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('close slow websocket if reached maxBackpressure', (done) => {
+    test('close slow websocket if reached maxBackpressure', (done) => {
         const wss = new WebSocket.Server({
             port,
             maxBackpressure: 1000000
         }, () => {
-            const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
+            const ws = new WebSocket(`ws://127.0.0.1:${wss.address().port}`)
         })
 
         wss.on('connection', (ws) => {
@@ -151,7 +155,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('can send a big binary message', (done) => {
+    test('can send a big binary message', (done) => {
         const wss = new WebSocket.Server({
             port,
             maxPayload: 5 * 1024 * 1024
@@ -183,7 +187,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('can send text data', (done) => {
+    test('can send text data', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -202,7 +206,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('sends numbers as strings', (done) => {
+    test('sends numbers as strings', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -219,7 +223,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('calls the callback when data is written out', (done) => {
+    test('calls the callback when data is written out', (done) => {
         const msg = 'hello'
 
         const wss = new WebSocket.Server({
@@ -236,7 +240,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('possible to send empty message', (done) => {
+    test('possible to send empty message', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -253,7 +257,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('works when close reason is not specified', (done) => {
+    test('works when close reason is not specified', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -271,7 +275,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('works when close reason is specified', (done) => {
+    test('works when close reason is specified', (done) => {
         const reason = 'bam-reason'
 
         const wss = new WebSocket.Server({
@@ -291,7 +295,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('allows close code 1013', (done) => {
+    test('allows close code 1013', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -306,7 +310,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         wss.on('connection', (ws) => ws.close(1013))
     })
 
-    it('allows close code 1014', (done) => {
+    test('allows close code 1014', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -321,7 +325,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         wss.on('connection', (ws) => ws.close(1014))
     })
 
-    it('cannot connect to secure websocket server via ws://', (done) => {
+    test('cannot connect to secure websocket server via ws://', (done) => {
         const wss = new WebSocket.Server({
             port,
             sslCert: './test/fixtures/cert.pem',
@@ -337,7 +341,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('can send and receive text data through SSL', (done) => {
+    test('can send and receive text data through SSL', (done) => {
         const wss = new WebSocket.Server({
             port,
             sslCert: './test/fixtures/cert.pem',
@@ -360,7 +364,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('can send and receive binary data through SSL', (done) => {
+    test('can send and receive binary data through SSL', (done) => {
         const wss = new WebSocket.Server({
             port,
             maxPayload: 5 * 1024 * 1024,
@@ -396,7 +400,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('can terminate socket from server', (done) => {
+    test('can terminate socket from server', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -412,7 +416,7 @@ describe('test WebSocket opened in WebSocket.Server', () => {
         })
     })
 
-    it('can get remoteAddress from websocket', (done) => {
+    test('can get remoteAddress from websocket', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {

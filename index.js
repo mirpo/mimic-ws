@@ -1,6 +1,6 @@
 const WebSocket = require('ws')
 
-// unassign stuff from ws
+// remove not needed stuff from ws
 delete WebSocket.Receiver
 delete WebSocket.Sender
 delete WebSocket.createWebSocketStream
