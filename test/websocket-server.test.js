@@ -3,11 +3,11 @@ const WebSocket = require('../index')
 const port = 1337
 
 describe('test WebSocket.Server', () => {
-    it('throws an error if no option object is passed', () => {
+    test('throws an error if no option object is passed', () => {
         expect(() => new WebSocket.Server()).toThrowError()
     })
 
-    it('throws an error if port 0', () => {
+    test('throws an error if port 0', () => {
         const options = {
             port: 0
         }
@@ -15,7 +15,7 @@ describe('test WebSocket.Server', () => {
         expect(() => new WebSocket.Server(options)).toThrowError()
     })
 
-    it('exposes options passed to constructor', (done) => {
+    test('exposes options passed to constructor', (done) => {
         const options = {
             port
         }
@@ -26,7 +26,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('check error handling', (done) => {
+    test('check error handling', (done) => {
         const options = {
             host: 'BAM_HOST',
             port
@@ -43,7 +43,7 @@ describe('test WebSocket.Server', () => {
     })
 
     // TODO enable later
-    // it('emits an error if http server bind fails', (done) => {
+    // test('emits an error if http server bind fails', (done) => {
     //     const wss1 = new WebSocket.Server({
     //         port
     //     }, () => {
@@ -58,7 +58,7 @@ describe('test WebSocket.Server', () => {
     //     })
     // })
 
-    it('starts a server on a given port', (done) => {
+    test('starts a server on a given port', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -68,16 +68,16 @@ describe('test WebSocket.Server', () => {
         wss.on('connection', () => wss.close(done))
     })
 
-    it('binds the server on any IPv6 address when available', (done) => {
+    test('binds the server on any IPv6 address when available', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
-            expect(wss.address().address).toEqual('0.0.0.0')
+            expect(wss.address().address).toEqual('127.0.0.1')
             wss.close(done)
         })
     })
 
-    it('does not throw when called twice', (done) => {
+    test('does not throw when called twice', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -89,7 +89,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('closes all clients', (done) => {
+    test('closes all clients', (done) => {
         let closes = 0
         const wss = new WebSocket.Server({
             port
@@ -114,7 +114,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('emits the "close" event', (done) => {
+    test('emits the "close" event', (done) => {
         const wss = new WebSocket.Server({
             port
         })
@@ -123,7 +123,7 @@ describe('test WebSocket.Server', () => {
         wss.close()
     })
 
-    it('returns a list of connected clients', (done) => {
+    test('returns a list of connected clients', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -137,7 +137,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('is updated when client terminates the connection', (done) => {
+    test('is updated when client terminates the connection', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -154,7 +154,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('is updated when client closes the connection', (done) => {
+    test('is updated when client closes the connection', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -171,7 +171,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('returns true when the path matches', () => {
+    test('returns true when the path matches', () => {
         const wss = new WebSocket.Server({
             port,
             path: '/foo'
@@ -184,7 +184,7 @@ describe('test WebSocket.Server', () => {
         wss.close()
     })
 
-    it("returns false when the path doesn't match", () => {
+    test("returns false when the path doesn't match", () => {
         const wss = new WebSocket.Server({
             port,
             path: '/foo'
@@ -201,7 +201,7 @@ describe('test WebSocket.Server', () => {
         wss.close()
     })
 
-    it("closes the connection when path doesn't match", (done) => {
+    test("closes the connection when path doesn't match", (done) => {
         const wss = new WebSocket.Server({
             port,
             path: '/foo'
@@ -216,8 +216,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    // TODO recheck verifyClient logic
-    it('can reject client synchronously', (done) => {
+    test('can reject client synchronously', (done) => {
         const wss = new WebSocket.Server(
             {
                 verifyClient: () => false,
@@ -226,9 +225,8 @@ describe('test WebSocket.Server', () => {
             () => {
                 const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
 
-                ws.on('close', (code, message) => {
-                    expect(code).toBe(1000)
-                    expect(message).toBe('')
+                ws.on('error', (err) => {
+                    ws.close()
                     wss.close()
                     done()
                 })
@@ -240,7 +238,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('start SSL server', (done) => {
+    test('start SSL server', (done) => {
         const wss = new WebSocket.Server({
             port,
             sslCert: './test/fixtures/cert.pem',
@@ -261,7 +259,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('check readyStates', (done) => {
+    test('check readyStates', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -283,7 +281,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('can send a ping with no data', (done) => {
+    test('can send a ping with no data', (done) => {
         const wss = new WebSocket.Server({
             port
         }, () => {
@@ -306,7 +304,7 @@ describe('test WebSocket.Server', () => {
         })
     })
 
-    it('throw if sslCert not found', () => {
+    test('throw if sslCert not found', () => {
         const sslCert = './test/fixtures/cert_WRONG.pem'
         expect(() => new WebSocket.Server({
             port,
@@ -315,7 +313,7 @@ describe('test WebSocket.Server', () => {
         })).toThrow(new Error(`sslCert file ${sslCert} doesnt exists.`))
     })
 
-    it('throw if sslKey not found', () => {
+    test('throw if sslKey not found', () => {
         const sslKey = './test/fixtures/key_WRONG.pem'
         expect(() => new WebSocket.Server({
             port,
@@ -324,7 +322,7 @@ describe('test WebSocket.Server', () => {
         })).toThrow(new Error(`sslKey file ${sslKey} doesnt exists.`))
     })
 
-    it('throw if only sslCert or sslKey is defined', () => {
+    test('throw if only sslCert or sslKey is defined', () => {
         expect(() => new WebSocket.Server({
             port,
             sslCert: './test/fixtures/cert.pem'
@@ -336,14 +334,14 @@ describe('test WebSocket.Server', () => {
         })).toThrow(new Error('For SSL sslCert and sslKey must be defined'))
     })
 
-    it('throw if path is not defined', () => {
+    test('throw if path is not defined', () => {
         expect(() => new WebSocket.Server({
             port,
             path: undefined
         })).toThrow(new Error('Path must be defined'))
     })
 
-    it('throw if maxPayloadLength is less than zeros', () => {
+    test('throw if maxPayloadLength is less than zeros', () => {
         expect(() => new WebSocket.Server({
             port,
             maxPayload: -1
@@ -351,21 +349,21 @@ describe('test WebSocket.Server', () => {
     })
 
     // TODO recheck later
-    // it('drops websocket on message larger than maxPayload', (done) => {
-    //     const wss = new WebSocket.Server({
-    //         port,
-    //         maxPayload: 10000
-    //     }, () => {
-    //         const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
-    //         ws.on('open', () => {
-    //             const data = Buffer.alloc(10001, 61)
-    //             ws.send(data)
-    //         })
-    //
-    //         ws.on('close', (code, reason) => {
-    //             expect(code).toEqual(1006)
-    //             wss.close(done)
-    //         })
-    //     })
-    // })
+    test('drops websocket on message larger than maxPayload', (done) => {
+        const wss = new WebSocket.Server({
+            port,
+            maxPayload: 10000
+        }, () => {
+            const ws = new WebSocket(`ws://localhost:${wss.address().port}`)
+            ws.on('open', () => {
+                const data = Buffer.alloc(10001, 61)
+                ws.send(data)
+            })
+
+            ws.on('close', (code, reason) => {
+                expect(code).toEqual(1006)
+                wss.close(done)
+            })
+        })
+    })
 })
