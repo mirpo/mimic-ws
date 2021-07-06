@@ -217,7 +217,7 @@ We're using the GitHub releases for changelog entries.
 [npm-url]: https://www.npmjs.com/package/mimic-ws
 
 [ci-image]: https://github.com/mirpo/mimic-ws/workflows/Build/badge.svg
-[ci-url]: https://github.com/mirpo/mimic-ws/actions?workflow=Build
+[ci-url]: https://github.com/mirpo/mimic-ws/actions
 
 [coveralls-image]: https://coveralls.io/repos/github/mirpo/mimic-ws/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/repos/github/mirpo/mimic-ws/?branch=master
+[coveralls-url]: https://coveralls.io/github/mirpo/mimic-ws
